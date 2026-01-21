@@ -78,7 +78,6 @@ export default function MilitaryOSMLayer() {
             zIndex: 99999,
             display: "flex",
             justifyContent: "center",
-            color: "white",
             fontSize: "24px",
             fontWeight: "bold",
           }}
@@ -105,7 +104,11 @@ export default function MilitaryOSMLayer() {
         </div>
 
         {MILITARY_TYPES.map((type) => (
-          <button key={type} onClick={() => setMilitaryType(type)}>
+          <button
+            style={{ color: "white" }}
+            key={type}
+            onClick={() => setMilitaryType(type)}
+          >
             {MILITARY_LABELS[type] || type}
           </button>
         ))}
