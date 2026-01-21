@@ -110,6 +110,28 @@ export default function MilitaryOSMLayer() {
           </button>
         ))}
       </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "10px",
+          left: "10px",
+          zIndex: 9999,
+          background: "rgba(255, 255, 255, 0.9)",
+          padding: "10px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
+        }}
+      >
+        <div>
+          <strong style={{ fontSize: "16px" }}>Legenda</strong>
+        </div>
+        <div>
+          <strong>Typ:</strong> {MILITARY_LABELS[militaryType]}
+        </div>
+        <div>
+          <strong>Liczba obiektów:</strong> {data?.features.length || 0}
+        </div>
+      </div>
 
       {data && (
         <GeoJSON
