@@ -1,3 +1,5 @@
+import L from "leaflet";
+import { useEffect, useRef } from "react";
 import type { LayerStyle } from "../types";
 
 type Props = {
@@ -6,8 +8,18 @@ type Props = {
 };
 
 export default function LayerStylePanel({ style, setStyle }: Props) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!panelRef.current) return;
+
+    L.DomEvent.disableClickPropagation(panelRef.current);
+    L.DomEvent.disableScrollPropagation(panelRef.current);
+  }, [panelRef]);
+
   return (
     <div
+      ref={panelRef}
       style={{
         position: "absolute",
         bottom: "10px",
