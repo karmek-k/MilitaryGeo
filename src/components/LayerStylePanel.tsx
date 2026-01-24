@@ -23,7 +23,7 @@ export default function LayerStylePanel({ style, setStyle }: Props) {
         <thead>
           <tr>
             <th>
-              <span style={{ fontSize: "16px" }}>Styl warstwy</span>
+              <span className="text-big">Styl warstwy</span>
             </th>
           </tr>
         </thead>

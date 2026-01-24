@@ -33,7 +33,20 @@
     left: 10px;
 }
 
+.text-big {
+    font-size: 16px;
+}
+
 .panel-layer-style {
     bottom: 10px;
     right: 10px;
+}
+
+.button-feature {
+    color: white;
+    margin-right: 4px;
+}
+
+.mb {
+    margin-bottom: 4px;
 }

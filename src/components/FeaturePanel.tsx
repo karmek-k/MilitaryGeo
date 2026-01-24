@@ -7,19 +7,21 @@ type Props = {
 export default function FeaturePanel({ setMilitaryType }: Props) {
   return (
     <div className="panel panel-features">
-      <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
-        Typ obiektu wojskowego:
+      <div className="mb">
+        <strong className="text-big">Typ obiektu wojskowego</strong>
       </div>
 
-      {MILITARY_TYPES.map((type) => (
-        <button
-          style={{ color: "white" }}
-          key={type}
-          onClick={() => setMilitaryType(type)}
-        >
-          {MILITARY_LABELS[type] || type}
-        </button>
-      ))}
+      <div>
+        {MILITARY_TYPES.map((type) => (
+          <button
+            className="button-feature"
+            key={type}
+            onClick={() => setMilitaryType(type)}
+          >
+            {MILITARY_LABELS[type] || type}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
