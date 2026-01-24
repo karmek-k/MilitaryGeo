@@ -6,13 +6,12 @@ import { MILITARY_LABELS, type LayerStyle } from "./types";
 import "./MilitaryLayer.css";
 import LegendPanel from "./components/LegendPanel";
 import FeaturePanel from "./components/FeaturePanel";
-import type { MilitaryType, GeoJSONData } from "./types";
+import type { MilitaryType } from "./types";
 import LoadingScreen from "./components/LoadingScreen";
+import useFeatureData from "./hooks/useFeatureData";
 
 export default function MilitaryOSMLayer() {
   const [militaryType, setMilitaryType] = useState<MilitaryType>("barracks");
-  const [data, setData] = useState<GeoJSONData | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const layerRef = useRef<L.GeoJSON | null>(null);
   const [style, setStyle] = useState<LayerStyle>({
     color: "#0000ff",
@@ -21,33 +20,7 @@ export default function MilitaryOSMLayer() {
   });
 
   const map = useMap();
-
-  const fetchData = async (type: MilitaryType) => {
-    setLoading(true);
-    setData(null);
-
-    const url = `/data/${type}.json`;
-
-    try {
-      const result = await fetch(url);
-
-      if (!result.ok) {
-        console.log("Nie znaleziono pliku.", url);
-        return;
-      }
-
-      const geojson = await result.json();
-      setData(geojson);
-    } catch (e) {
-      console.error("Błąd podczas pobierania danych:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(militaryType);
-  }, [militaryType]);
+  const { data, loading } = useFeatureData(militaryType);
 
   useEffect(() => {
     if (!data || !layerRef.current) return;
