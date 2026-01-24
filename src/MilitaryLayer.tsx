@@ -49,7 +49,11 @@ export default function MilitaryOSMLayer() {
   const [data, setData] = useState<GeoJSONData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const layerRef = useRef<L.GeoJSON | null>(null);
-  const [style, setStyle] = useState<LayerStyle>({ color: "#0000ff" });
+  const [style, setStyle] = useState<LayerStyle>({
+    color: "#0000ff",
+    borderWeight: 6,
+    opacity: 1,
+  });
 
   const map = useMap();
 
@@ -170,8 +174,8 @@ export default function MilitaryOSMLayer() {
           ref={layerRef}
           style={() => ({
             color: style.color,
-            // weight: 6,
-            // opacity: 1,
+            weight: style.borderWeight,
+            opacity: style.opacity,
             // fillColor: "#ff0000",
             // fillOpacity: 0.45,
           })}
