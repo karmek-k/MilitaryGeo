@@ -2,21 +2,44 @@ import { useEffect, useState, useRef } from "react";
 import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 
-type MilitaryType = "barracks" | "naval_base";
-// TODO: dodaj więcej typów z pdfa
+type MilitaryType =
+  | "barracks"
+  | "naval_base"
+  | "airfield"
+  | "training_area"
+  | "range"
+  | "primary"
+  | "office"
+  | "danger_area"
+  | "shelter"
+  | "bunker";
 
 type GeoJSONData = GeoJSON.FeatureCollection;
 
 const MILITARY_TYPES: MilitaryType[] = [
   "barracks",
   "naval_base",
-  // TODO: dodać brakujące typy
+  "airfield",
+  "training_area",
+  "range",
+  "primary",
+  "office",
+  "danger_area",
+  "shelter",
+  "bunker",
 ];
 
 const MILITARY_LABELS: Record<MilitaryType, string> = {
   barracks: "Koszary",
   naval_base: "Baza morska",
-  // TODO: dalsze tłumaczenia
+  airfield: "Lotnisko",
+  training_area: "Obszar treningowy",
+  range: "Strzelnica",
+  primary: "Baza logistyczna",
+  office: "Biuro",
+  danger_area: "Obszar zagrożenia",
+  shelter: "Schron",
+  bunker: "Bunkier",
 };
 
 export default function MilitaryOSMLayer() {
@@ -45,7 +68,6 @@ export default function MilitaryOSMLayer() {
       setData(geojson);
     } catch (e) {
       console.error("Błąd podczas pobierania danych:", e);
-      // TODO
     } finally {
       setLoading(false);
     }
