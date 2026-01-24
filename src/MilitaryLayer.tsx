@@ -7,6 +7,7 @@ import "./MilitaryLayer.css";
 import LegendPanel from "./components/LegendPanel";
 import FeaturePanel from "./components/FeaturePanel";
 import type { MilitaryType, GeoJSONData } from "./types";
+import LoadingScreen from "./components/LoadingScreen";
 
 export default function MilitaryOSMLayer() {
   const [militaryType, setMilitaryType] = useState<MilitaryType>("barracks");
@@ -59,12 +60,7 @@ export default function MilitaryOSMLayer() {
 
   return (
     <>
-      {loading && (
-        <div className="loading">
-          Ładowanie: {MILITARY_LABELS[militaryType]}
-        </div>
-      )}
-
+      {loading && <LoadingScreen label={MILITARY_LABELS[militaryType]} />}
       <FeaturePanel setMilitaryType={setMilitaryType} />
       <LegendPanel
         type={MILITARY_LABELS[militaryType]}
