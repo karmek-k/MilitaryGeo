@@ -33,7 +33,11 @@ export default function LayerStylePanel({ style, setStyle }: Props) {
     >
       <table>
         <thead>
-          <strong style={{ fontSize: "16px" }}>Styl warstwy</strong>
+          <tr>
+            <th>
+              <span style={{ fontSize: "16px" }}>Styl warstwy</span>
+            </th>
+          </tr>
         </thead>
         <tbody>
           <tr>
@@ -55,8 +59,8 @@ export default function LayerStylePanel({ style, setStyle }: Props) {
             <td>
               <input
                 type="range"
-                min="1"
-                max="18"
+                min="0"
+                max="12"
                 step="1"
                 value={style.borderWeight}
                 onChange={(e) =>
