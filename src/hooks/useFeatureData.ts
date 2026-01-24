@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { GeoJSONData, MilitaryType } from "../types";
+import { MILITARY_TYPES, type GeoJSONData, type MilitaryType } from "../types";
 
 export default function useFeatureData(militaryType: MilitaryType) {
   const [data, setData] = useState<GeoJSONData | null>(null);
@@ -9,18 +9,42 @@ export default function useFeatureData(militaryType: MilitaryType) {
     setLoading(true);
     setData(null);
 
-    const url = `/data/${type}.json`;
+    const urls =
+      type === "all"
+        ? MILITARY_TYPES.map((type) => `/data/${type}.json`)
+        : [`/data/${type}.json`];
 
     try {
-      const result = await fetch(url);
+      const allDataPromises = urls.map(async (url) => {
+        try {
+          const res = await fetch(url);
 
-      if (!result.ok) {
-        console.log("Nie znaleziono pliku.", url);
-        return;
-      }
+          // TU PRZYWRACAMY SPRAWDZANIE:
+          if (!res.ok) {
+            console.warn(
+              `Nie znaleziono pliku: ${url} (Status: ${res.status})`,
+            );
+            return null; // Zwracamy null, by pominąć ten plik
+          }
 
-      const geojson = await result.json();
-      setData(geojson);
+          return await res.json();
+        } catch (err) {
+          console.error(`Błąd sieci dla pliku ${url}`, err);
+          return null;
+        }
+      });
+
+      // Czekamy na wszystkie odpowiedzi
+      const results = await Promise.all(allDataPromises);
+
+      // Filtrujemy null-e (pliki, których nie znaleziono)
+      const validData = results.filter((item) => item !== null);
+      const combinedFeatures = validData.flatMap((data) => data.features);
+
+      setData({
+        type: "FeatureCollection",
+        features: combinedFeatures,
+      });
     } catch (e) {
       console.error("Błąd podczas pobierania danych:", e);
     } finally {

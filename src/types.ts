@@ -5,6 +5,7 @@ export type LayerStyle = {
 };
 
 export type MilitaryType =
+  | "all"
   | "barracks"
   | "naval_base"
   | "airfield"
@@ -19,6 +20,7 @@ export type MilitaryType =
 export type GeoJSONData = GeoJSON.FeatureCollection;
 
 export const MILITARY_TYPES: MilitaryType[] = [
+  "all",
   "barracks",
   "naval_base",
   "airfield",
@@ -32,6 +34,7 @@ export const MILITARY_TYPES: MilitaryType[] = [
 ];
 
 export const MILITARY_LABELS: Record<MilitaryType, string> = {
+  all: "Wszystkie",
   barracks: "Koszary",
   naval_base: "Baza morska",
   airfield: "Lotnisko",
