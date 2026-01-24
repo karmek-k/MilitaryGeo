@@ -36,6 +36,40 @@ export default function LayerStylePanel({ style, setStyle }: Props) {
               />
             </td>
           </tr>
+          <tr>
+            <td>
+              <strong>Grubość</strong>
+            </td>
+            <td>
+              <input
+                type="range"
+                min="1"
+                max="18"
+                step="1"
+                value={style.borderWeight}
+                onChange={(e) =>
+                  setStyle({ ...style, borderWeight: parseInt(e.target.value) })
+                }
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Przezroczystość</strong>
+            </td>
+            <td>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={style.opacity}
+                onChange={(e) =>
+                  setStyle({ ...style, opacity: parseFloat(e.target.value) })
+                }
+              />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

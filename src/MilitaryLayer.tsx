@@ -176,8 +176,7 @@ export default function MilitaryOSMLayer() {
             color: style.color,
             weight: style.borderWeight,
             opacity: style.opacity,
-            // fillColor: "#ff0000",
-            // fillOpacity: 0.45,
+            fillOpacity: style.opacity / 2.0,
           })}
         />
       )}
