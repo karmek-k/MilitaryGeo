@@ -2,49 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import LayerStylePanel from "./components/LayerStylePanel";
-import type { LayerStyle } from "./types";
+import { MILITARY_LABELS, type LayerStyle } from "./types";
 import "./MilitaryLayer.css";
 import LegendPanel from "./components/LegendPanel";
-
-type MilitaryType =
-  | "barracks"
-  | "naval_base"
-  | "airfield"
-  | "training_area"
-  | "range"
-  | "primary"
-  | "office"
-  | "danger_area"
-  | "shelter"
-  | "bunker";
-
-type GeoJSONData = GeoJSON.FeatureCollection;
-
-const MILITARY_TYPES: MilitaryType[] = [
-  "barracks",
-  "naval_base",
-  "airfield",
-  "training_area",
-  "range",
-  "primary",
-  "office",
-  "danger_area",
-  "shelter",
-  "bunker",
-];
-
-const MILITARY_LABELS: Record<MilitaryType, string> = {
-  barracks: "Koszary",
-  naval_base: "Baza morska",
-  airfield: "Lotnisko",
-  training_area: "Obszar treningowy",
-  range: "Strzelnica",
-  primary: "Baza logistyczna",
-  office: "Biuro",
-  danger_area: "Obszar zagrożenia",
-  shelter: "Schron",
-  bunker: "Bunkier",
-};
+import FeaturePanel from "./components/FeaturePanel";
+import type { MilitaryType, GeoJSONData } from "./types";
 
 export default function MilitaryOSMLayer() {
   const [militaryType, setMilitaryType] = useState<MilitaryType>("barracks");
@@ -103,25 +65,10 @@ export default function MilitaryOSMLayer() {
         </div>
       )}
 
-      <div className="panel panel-features">
-        <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
-          Typ obiektu wojskowego:
-        </div>
-
-        {MILITARY_TYPES.map((type) => (
-          <button
-            style={{ color: "white" }}
-            key={type}
-            onClick={() => setMilitaryType(type)}
-          >
-            {MILITARY_LABELS[type] || type}
-          </button>
-        ))}
-      </div>
-
+      <FeaturePanel setMilitaryType={setMilitaryType} />
       <LegendPanel
         type={MILITARY_LABELS[militaryType]}
-        objectCount={data?.features.length || 0}
+        objectCount={data?.features.length ?? 0}
       />
       <LayerStylePanel style={style} setStyle={setStyle} />
 
