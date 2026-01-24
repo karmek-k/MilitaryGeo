@@ -4,6 +4,7 @@ import L from "leaflet";
 import LayerStylePanel from "./components/LayerStylePanel";
 import type { LayerStyle } from "./types";
 import "./MilitaryLayer.css";
+import LegendPanel from "./components/LegendPanel";
 
 type MilitaryType =
   | "barracks"
@@ -117,18 +118,11 @@ export default function MilitaryOSMLayer() {
           </button>
         ))}
       </div>
-      <div className="panel panel-legend">
-        <div>
-          <strong style={{ fontSize: "16px" }}>Legenda</strong>
-        </div>
-        <div>
-          <strong>Typ:</strong> {MILITARY_LABELS[militaryType]}
-        </div>
-        <div>
-          <strong>Liczba obiektów:</strong> {data?.features.length || 0}
-        </div>
-      </div>
 
+      <LegendPanel
+        type={MILITARY_LABELS[militaryType]}
+        objectCount={data?.features.length || 0}
+      />
       <LayerStylePanel style={style} setStyle={setStyle} />
 
       {data && (
