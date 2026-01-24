@@ -3,6 +3,7 @@ import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import LayerStylePanel from "./components/LayerStylePanel";
 import type { LayerStyle } from "./types";
+import "./MilitaryLayer.css";
 
 type MilitaryType =
   | "barracks"
@@ -96,38 +97,12 @@ export default function MilitaryOSMLayer() {
   return (
     <>
       {loading && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 99999,
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "24px",
-            fontWeight: "bold",
-          }}
-        >
+        <div className="loading">
           Ładowanie: {MILITARY_LABELS[militaryType]}
         </div>
       )}
 
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          zIndex: 9999,
-          background: "rgba(255, 255, 255, 0.9)",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-          width: "80vw",
-        }}
-      >
+      <div className="panel panel-features">
         <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
           Typ obiektu wojskowego:
         </div>
@@ -142,18 +117,7 @@ export default function MilitaryOSMLayer() {
           </button>
         ))}
       </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: "10px",
-          left: "10px",
-          zIndex: 9999,
-          background: "rgba(255, 255, 255, 0.9)",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-        }}
-      >
+      <div className="panel panel-legend">
         <div>
           <strong style={{ fontSize: "16px" }}>Legenda</strong>
         </div>

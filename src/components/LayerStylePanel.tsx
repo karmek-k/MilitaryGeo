@@ -18,19 +18,7 @@ export default function LayerStylePanel({ style, setStyle }: Props) {
   }, [panelRef]);
 
   return (
-    <div
-      ref={panelRef}
-      style={{
-        position: "absolute",
-        bottom: "10px",
-        right: "10px",
-        zIndex: 9999,
-        background: "rgba(255, 255, 255, 0.9)",
-        padding: "10px",
-        borderRadius: "8px",
-        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-      }}
-    >
+    <div ref={panelRef} className="panel panel-layer-style">
       <table>
         <thead>
           <tr>
