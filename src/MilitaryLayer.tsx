@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
+import LayerStylePanel from "./components/LayerStylePanel";
+import type { LayerStyle } from "./types";
 
 type MilitaryType =
   | "barracks"
@@ -47,7 +49,7 @@ export default function MilitaryOSMLayer() {
   const [data, setData] = useState<GeoJSONData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const layerRef = useRef<L.GeoJSON | null>(null);
-  const [featureColor, setFeatureColor] = useState<string>("#0000ff");
+  const [style, setStyle] = useState<LayerStyle>({ color: "#0000ff" });
 
   const map = useMap();
 
@@ -159,38 +161,7 @@ export default function MilitaryOSMLayer() {
         </div>
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          bottom: "10px",
-          right: "10px",
-          zIndex: 9999,
-          background: "rgba(255, 255, 255, 0.9)",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-        }}
-      >
-        <table>
-          <thead>
-            <strong style={{ fontSize: "16px" }}>Styl warstwy</strong>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <strong>Kolor</strong>
-              </td>
-              <td>
-                <input
-                  type="color"
-                  value={featureColor}
-                  onChange={(e) => setFeatureColor(e.target.value)}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <LayerStylePanel style={style} setStyle={setStyle} />
 
       {data && (
         <GeoJSON
@@ -198,7 +169,7 @@ export default function MilitaryOSMLayer() {
           data={data}
           ref={layerRef}
           style={() => ({
-            color: featureColor,
+            color: style.color,
             // weight: 6,
             // opacity: 1,
             // fillColor: "#ff0000",
