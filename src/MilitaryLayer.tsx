@@ -1,81 +1,26 @@
 import { useEffect, useState, useRef } from "react";
 import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
-
-type MilitaryType =
-  | "barracks"
-  | "naval_base"
-  | "airfield"
-  | "training_area"
-  | "range"
-  | "primary"
-  | "office"
-  | "danger_area"
-  | "shelter"
-  | "bunker";
-
-type GeoJSONData = GeoJSON.FeatureCollection;
-
-const MILITARY_TYPES: MilitaryType[] = [
-  "barracks",
-  "naval_base",
-  "airfield",
-  "training_area",
-  "range",
-  "primary",
-  "office",
-  "danger_area",
-  "shelter",
-  "bunker",
-];
-
-const MILITARY_LABELS: Record<MilitaryType, string> = {
-  barracks: "Koszary",
-  naval_base: "Baza morska",
-  airfield: "Lotnisko",
-  training_area: "Obszar treningowy",
-  range: "Strzelnica",
-  primary: "Baza logistyczna",
-  office: "Biuro",
-  danger_area: "Obszar zagrożenia",
-  shelter: "Schron",
-  bunker: "Bunkier",
-};
+import LayerStylePanel from "./components/LayerStylePanel";
+import { MILITARY_LABELS, type LayerStyle } from "./types";
+import "./MilitaryLayer.css";
+import LegendPanel from "./components/LegendPanel";
+import FeaturePanel from "./components/FeaturePanel";
+import type { MilitaryType } from "./types";
+import LoadingScreen from "./components/LoadingScreen";
+import useFeatureData from "./hooks/useFeatureData";
 
 export default function MilitaryOSMLayer() {
   const [militaryType, setMilitaryType] = useState<MilitaryType>("barracks");
-  const [data, setData] = useState<GeoJSONData | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const layerRef = useRef<L.GeoJSON | null>(null);
+  const [style, setStyle] = useState<LayerStyle>({
+    color: "#0000ff",
+    borderWeight: 6,
+    opacity: 1,
+  });
 
   const map = useMap();
-
-  const fetchData = async (type: MilitaryType) => {
-    setLoading(true);
-    setData(null);
-
-    const url = `/data/${type}.json`;
-
-    try {
-      const result = await fetch(url);
-
-      if (!result.ok) {
-        console.log("Nie znaleziono pliku.", url);
-        return;
-      }
-
-      const geojson = await result.json();
-      setData(geojson);
-    } catch (e) {
-      console.error("Błąd podczas pobierania danych:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(militaryType);
-  }, [militaryType]);
+  const { data, loading } = useFeatureData(militaryType);
 
   useEffect(() => {
     if (!data || !layerRef.current) return;
@@ -88,63 +33,25 @@ export default function MilitaryOSMLayer() {
 
   return (
     <>
-      {loading && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 99999,
-            display: "flex",
-            justifyContent: "center",
-            color: "white",
-            fontSize: "24px",
-            fontWeight: "bold",
-          }}
-        >
-          Ładowanie: {MILITARY_LABELS[militaryType]}
-        </div>
-      )}
-
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          zIndex: 9999,
-          background: "rgba(255, 255, 255, 0.9)",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-          width: "80vw",
-        }}
-      >
-        <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
-          Typ obiektu wojskowego:
-        </div>
-
-        {MILITARY_TYPES.map((type) => (
-          <button key={type} onClick={() => setMilitaryType(type)}>
-            {MILITARY_LABELS[type] || type}
-          </button>
-        ))}
-      </div>
+      {loading && <LoadingScreen label={MILITARY_LABELS[militaryType]} />}
+      <FeaturePanel setMilitaryType={setMilitaryType} />
+      <LegendPanel
+        type={MILITARY_LABELS[militaryType]}
+        objectCount={data?.features.length ?? 0}
+      />
+      <LayerStylePanel style={style} setStyle={setStyle} />
 
       {data && (
         <GeoJSON
           key={militaryType}
           data={data}
           ref={layerRef}
-          // style={() => ({
-          //   color: "#ff0000",
-          //   weight: 6,
-          //   opacity: 1,
-          //   fillColor: "#ff0000",
-          //   fillOpacity: 0.45,
-          // })}
+          style={() => ({
+            color: style.color,
+            weight: style.borderWeight,
+            opacity: style.opacity,
+            fillOpacity: style.opacity / 2.0,
+          })}
         />
       )}
     </>
